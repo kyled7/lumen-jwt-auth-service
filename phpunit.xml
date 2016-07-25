@@ -30,4 +30,7 @@
         <env name="DB_PASSWORD" value=""/>
         <env name="CACHE_DRIVER" value="array"/>
     </php>
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
 </phpunit>
