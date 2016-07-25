@@ -1,6 +1,6 @@
 # [JWT](https://github.com/tymondesigns/jwt-auth) based Authentication micro-service with Lumen frameworks
 
-[![Build Status](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service.svg?branch=master)](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service)
+[![CircleCI](https://circleci.com/gh/kyle-dinh/lumen-jwt-auth-service.svg?style=svg)](https://circleci.com/gh/kyle-dinh/lumen-jwt-auth-service)
 [![StyleCI](https://styleci.io/repos/64127829/shield)](https://styleci.io/repos/64127829)
 [![codecov](https://codecov.io/gh/kyle-dinh/lumen-jwt-auth-service/branch/master/graph/badge.svg)](https://codecov.io/gh/kyle-dinh/lumen-jwt-auth-service)
 
