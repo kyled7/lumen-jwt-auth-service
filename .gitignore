@@ -1,2 +1,9 @@
 /vendor
 .env
+.idea/
+
+Homestead.yaml
+
+Vagrantfile
+
+*.lock
