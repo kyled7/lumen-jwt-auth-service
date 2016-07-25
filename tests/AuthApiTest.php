@@ -9,7 +9,7 @@ class AuthApiTest extends TestCase
     public function testSigninApiSuccess()
     {
         $user = factory('App\User')->create([
-            'password' => app('hash')->make('123456')
+            'password' => app('hash')->make('123456'),
         ]);
         $this->post('/auth/signin', ['email' => $user->email, 'password' => '123456'])
             ->seeJsonStructure(['token']);
@@ -17,7 +17,7 @@ class AuthApiTest extends TestCase
 
     public function testSigninApiFails()
     {
-        $this->post('/auth/signin',[])
+        $this->post('/auth/signin', [])
             ->seeStatusCode(422)
             ->seeJsonStructure(['email', 'password']);
 
@@ -44,7 +44,7 @@ class AuthApiTest extends TestCase
 
     public function testSignupApiFails()
     {
-        $this->post('/auth/signup',[])
+        $this->post('/auth/signup', [])
             ->seeStatusCode(422)
             ->seeJsonStructure(['email', 'password', 'username']);
 
@@ -54,7 +54,7 @@ class AuthApiTest extends TestCase
 
         $this->post('auth/signup', ['email' => 'email@test.com'])
             ->seeStatusCode(422)
-            ->seeJsonStructure(['password','username']);
+            ->seeJsonStructure(['password', 'username']);
 
         $this->post('auth/signup', ['password' => 'some string'])
             ->seeStatusCode(422)
@@ -78,9 +78,9 @@ class AuthApiTest extends TestCase
     {
         $this->post('auth/signup', [
             'username' => 'username',
-            'email' => 'email@test.com',
-            'password' => 'password'
-        ]) ->seeStatusCode(201)
+            'email'    => 'email@test.com',
+            'password' => 'password',
+        ])->seeStatusCode(201)
             ->seeJsonStructure(['token']);
 
         $this->seeInDatabase('users', ['email' => 'email@test.com']);
