@@ -14,9 +14,10 @@ before_script:
   - mkdir -p /home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - composer self-update
   - composer install --prefer-source
-  - cp .env.travis .env
-  - mysql -e 'create database if not exists travis_test;'
+  - mysql -e 'create database if not exists microservices_test;'
 
+script:
+  - phpunit
 
 after_success:
  - mkdir -p build/logs
