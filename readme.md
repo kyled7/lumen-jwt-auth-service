@@ -1,6 +1,6 @@
 # [JWT](https://github.com/tymondesigns/jwt-auth) based Authentication micro-service with Lumen frameworks
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
+[![Build Status](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service.svg?branch=master)](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service)
 
 Authentication micro-service built on Lumen framework with JWT support.
 
