@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service.svg?branch=master)](https://travis-ci.org/kyle-dinh/lumen-jwt-auth-service)
 [![StyleCI](https://styleci.io/repos/64127829/shield)](https://styleci.io/repos/64127829)
+[![codecov](https://codecov.io/gh/kyle-dinh/lumen-jwt-auth-service/branch/master/graph/badge.svg)](https://codecov.io/gh/kyle-dinh/lumen-jwt-auth-service)
+
 
 Authentication micro-service built on Lumen framework with JWT support.
 
