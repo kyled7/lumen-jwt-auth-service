@@ -24,7 +24,7 @@ class AuthController extends Controller
         $this->githubProvider->scopes([
             'user:email',
             'repo',
-            'write:repo_hook'
+            'write:repo_hook',
         ]);
     }
 
@@ -72,7 +72,7 @@ class AuthController extends Controller
     public function postGithubCallback(Request $request)
     {
         $this->validate($request, [
-            'code' => 'required'
+            'code' => 'required',
         ]);
 
         $githubUser = $this->githubProvider->user();
@@ -90,9 +90,9 @@ class AuthController extends Controller
                 try {
                     $user = User::create([
                         'username' => $githubUser->getNickname(),
-                        'email' => $githubUser->getEmail(),
-                        'avatar' => $githubUser->getAvatar(),
-                        'github' => $githubUser->getId()
+                        'email'    => $githubUser->getEmail(),
+                        'avatar'   => $githubUser->getAvatar(),
+                        'github'   => $githubUser->getId(),
                     ]);
                 } catch (\Exception $e) {
                     return response()->json('cannot_save_user', 500);
@@ -101,7 +101,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'token' => $this->jwt->fromUser($user)
+            'token' => $this->jwt->fromUser($user),
         ]);
     }
 
@@ -113,14 +113,15 @@ class AuthController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return User
      */
     protected function create(array $data)
     {
         return User::create([
             'username' => $data['username'],
-            'email' => $data['email'],
+            'email'    => $data['email'],
             'password' => app('hash')->make($data['password']),
         ]);
     }
