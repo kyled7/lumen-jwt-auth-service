@@ -117,5 +117,4 @@ class AuthApiTest extends TestCase
 
         $this->seeInDatabase('users', ['github' => 123]);
     }
-
 }
