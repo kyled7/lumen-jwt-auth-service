@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
@@ -13,9 +14,18 @@ class AuthController extends Controller
      */
     protected $jwt;
 
+    protected $githubProvider;
+
     public function __construct(JWTAuth $jwt)
     {
         $this->jwt = $jwt;
+        $this->githubProvider = Socialite::driver('github');
+        $this->githubProvider->stateless();
+        $this->githubProvider->scopes([
+            'user:email',
+            'repo',
+            'write:repo_hook'
+        ]);
     }
 
     public function postSignin(Request $request)
@@ -49,7 +59,7 @@ class AuthController extends Controller
         ]);
 
         try {
-            $user = User::create($request->only('email', 'username', 'password'));
+            $user = $this->create($request->only('email', 'username', 'password'));
         } catch (\Exception $e) {
             return response()->json('cannot_save_user', 500);
         }
@@ -57,5 +67,61 @@ class AuthController extends Controller
         $token = $this->jwt->fromUser($user);
 
         return response()->json(compact('token'), 201);
+    }
+
+    public function postGithubCallback(Request $request)
+    {
+        $this->validate($request, [
+            'code' => 'required'
+        ]);
+
+        $githubUser = $this->githubProvider->user();
+
+        //Find user by github id
+        $user = User::where('github', $githubUser->getId())->first();
+        if (!$user) {
+
+            //Find user by email
+            $user = User::where('email', $githubUser->getEmail())->first();
+            if ($user) {
+                $user->github = $githubUser->getId();
+                $user->save();
+            } else {
+                try {
+                    $user = User::create([
+                        'username' => $githubUser->getNickname(),
+                        'email' => $githubUser->getEmail(),
+                        'avatar' => $githubUser->getAvatar(),
+                        'github' => $githubUser->getId()
+                    ]);
+                } catch (\Exception $e) {
+                    return response()->json('cannot_save_user', 500);
+                }
+            }
+        }
+
+        return response()->json([
+            'token' => $this->jwt->fromUser($user)
+        ]);
+    }
+
+    public function getGithubAuthUrl()
+    {
+        return response()->json($this->githubProvider->redirect()->getTargetUrl(), 200);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function create(array $data)
+    {
+        return User::create([
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => app('hash')->make($data['password']),
+        ]);
     }
 }

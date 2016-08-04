@@ -17,3 +17,5 @@ $app->get('/', function () use ($app) {
 
 $app->post('/auth/signin', 'AuthController@postSignin');
 $app->post('/auth/signup', 'AuthController@postSignup');
+$app->post('/auth/github', 'AuthController@postGithubCallback');
+$app->get('/auth/githubAuthUrl', 'AuthController@getGithubAuthUrl');

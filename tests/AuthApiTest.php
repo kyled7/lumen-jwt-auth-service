@@ -1,6 +1,7 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthApiTest extends TestCase
 {
@@ -84,5 +85,37 @@ class AuthApiTest extends TestCase
             ->seeJsonStructure(['token']);
 
         $this->seeInDatabase('users', ['email' => 'email@test.com']);
+
+        $this->post('/auth/signin', ['email' => 'email@test.com', 'password' => 'password'])
+            ->seeJsonStructure(['token']);
     }
+
+    public function testGithubLogin()
+    {
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
+        $abstractUser->shouldReceive('getId')
+            ->andReturn(123)
+            ->shouldReceive('getEmail')
+            ->andReturn('mail@mail.com')
+            ->shouldReceive('getNickname')
+            ->andReturn('nick name')
+            ->shouldReceive('getAvatar')
+            ->andReturn('https://en.gravatar.com/userimage');
+
+        $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+        $provider->shouldReceive('stateless')
+            ->andReturn($provider)
+            ->shouldReceive('scopes')
+            ->andReturn($provider)
+            ->shouldReceive('user')
+            ->andReturn($abstractUser);
+        Socialite::shouldReceive('driver')->with('github')->andReturn($provider);
+
+        $this->post('/auth/github', ['code' => 'any string'])
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['token']);
+
+        $this->seeInDatabase('users', ['github' => 123]);
+    }
+
 }
